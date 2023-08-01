@@ -1,10 +1,12 @@
 package com.joaquim.quiz.framework.data.local
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.joaquim.quiz.framework.data.model.user.UserModel
 import kotlinx.coroutines.flow.Flow
 
@@ -19,4 +21,10 @@ interface QuizDao {
 
     @Delete
     suspend fun delete(user: UserModel)
+
+    @Query("UPDATE userModel SET points=:points WHERE id = :id")
+    suspend fun setPoints(id: Int, points: Int)
+
+    @Query("SELECT * FROM userModel WHERE name=:name ")
+    fun loadUser(name: String): LiveData<UserModel>
 }

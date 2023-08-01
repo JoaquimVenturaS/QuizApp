@@ -10,9 +10,13 @@ class QuizRepository @Inject constructor(
     private val api: QuizApi,
     private val dao: QuizDao
 ) {
-    suspend fun getUser() = api.getQuestion()
+    suspend fun getQuestion() = api.getQuestion()
 
     suspend fun insert(userModel: UserModel) = dao.insert(userModel)
     fun getAll() = dao.getAll()
     suspend fun delete(userModel: UserModel) = dao.delete(userModel)
+
+    suspend fun setPoints(id: Int, points: Int) = dao.setPoints(id, points)
+
+    suspend fun loadUser(name: String) = dao.loadUser(name)
 }

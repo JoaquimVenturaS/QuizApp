@@ -1,0 +1,29 @@
+package com.joaquim.quiz.presentantion.login
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.joaquim.quiz.framework.data.model.user.UserModel
+import com.joaquim.quiz.framework.repository.QuizRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val repository: QuizRepository
+) : ViewModel() {
+
+    fun login(userModel: UserModel) = viewModelScope.launch {
+        val user = repository.loadUser(userModel.name).value
+        if (user != null) {
+
+        } else {
+            insert(userModel)
+
+        }
+    }
+
+    private fun insert(userModel: UserModel) = viewModelScope.launch {
+        repository.insert(userModel)
+    }
+}
