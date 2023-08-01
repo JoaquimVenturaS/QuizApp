@@ -1,4 +1,4 @@
-package com.joaquim.quiz.presentantion.login
+package com.joaquim.quiz.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

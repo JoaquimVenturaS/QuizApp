@@ -1,4 +1,4 @@
-package com.joaquim.quiz.presentantion.base
+package com.joaquim.quiz.presentation.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import com.joaquim.quiz.databinding.FragmentHomeBinding
 
 abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
 

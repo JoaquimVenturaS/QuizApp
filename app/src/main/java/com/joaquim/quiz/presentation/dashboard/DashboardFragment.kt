@@ -1,4 +1,4 @@
-package com.joaquim.quiz.presentantion.dashboard
+package com.joaquim.quiz.presentation.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater

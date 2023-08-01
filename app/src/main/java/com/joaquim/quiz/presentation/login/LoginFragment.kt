@@ -1,4 +1,4 @@
-package com.joaquim.quiz.presentantion.login
+package com.joaquim.quiz.presentation.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,10 @@ import androidx.navigation.fragment.findNavController
 import com.joaquim.quiz.R
 import com.joaquim.quiz.databinding.FragmentLoginBinding
 import com.joaquim.quiz.framework.data.model.user.UserModel
-import com.joaquim.quiz.presentantion.base.BaseFragment
+import com.joaquim.quiz.presentation.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     override val viewModel: LoginViewModel by viewModels()
 
@@ -28,7 +30,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     }
 
     private fun login() {
-        userModel.name = binding.username.text.toString()
+        userModel = UserModel(0, binding.username.text.toString())
         viewModel.login(userModel)
         updateUiWithUser()
         val action = LoginFragmentDirections.actionLoginFragmentToNavigationHome()

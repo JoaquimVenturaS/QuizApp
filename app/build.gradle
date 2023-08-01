@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id("com.google.dagger.hilt.android")
-    id ("androidx.navigation.safeargs.kotlin")
+    id("androidx.navigation.safeargs")
 }
 apply plugin: 'kotlin-kapt'
 
@@ -18,8 +18,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField "String", "BASE_URL", '"https://quiz-api-bwi5hjqyaq-uc.a.run.app/"'
     }
 
     buildTypes {
@@ -57,7 +55,6 @@ dependencies {
     def nav_version = '2.6.0'
     api "androidx.navigation:navigation-fragment-ktx:$nav_version"
     api "androidx.navigation:navigation-ui-ktx:$nav_version"
-    api "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
 
     // OkHttp
     def okhttp_version = '4.3.0'
@@ -71,10 +68,6 @@ dependencies {
 
     // Gson
     api 'com.google.code.gson:gson:2.10.1'
-
-    // Paging3
-    def paging_version = "3.1.1"
-    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     // Other Libs
     implementation 'com.facebook.shimmer:shimmer:0.5.0'

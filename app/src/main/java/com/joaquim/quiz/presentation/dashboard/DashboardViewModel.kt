@@ -1,4 +1,4 @@
-package com.joaquim.quiz.presentantion.dashboard
+package com.joaquim.quiz.presentation.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -2,10 +2,9 @@ package com.joaquim.quiz.framework.di
 
 import android.content.Context
 import androidx.room.Room
-import com.facebook.shimmer.BuildConfig
-import com.joaquim.quiz.BuildConfig.BASE_URL
 import com.joaquim.quiz.framework.data.local.QuizDatabase
 import com.joaquim.quiz.framework.data.remote.QuizApi
+import com.joaquim.quiz.framework.util.Constants.BASE_URL
 import com.joaquim.quiz.framework.util.Constants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
@@ -16,13 +15,14 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
+import java.math.BigInteger
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val TIMEOUT_SECONDS = 25L
 
     @Singleton
     @Provides
@@ -38,44 +38,42 @@ object NetworkModule {
     @Provides
     fun provideQuizDao(database: QuizDatabase) = database.quizDao()
 
+    @Singleton
     @Provides
-    fun provideLogginInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().apply {
-            apply {
-                level = if (BuildConfig.DEBUG) {
-                    HttpLoggingInterceptor.Level.BODY
-                } else HttpLoggingInterceptor.Level.NONE
-            }
-        }
-    }
+    fun provideOkHttpClient(): OkHttpClient {
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BODY
 
-    @Provides
-    fun provideOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        return OkHttpClient().newBuilder()
+            .addInterceptor { chain ->
+                val currentTimestamp = System.currentTimeMillis()
+                val newUrl = chain.request().url
+                    .newBuilder()
+                    .build()
+
+                val newRequest = chain.request()
+                    .newBuilder()
+                    .url(newUrl)
+                    .build()
+                chain.proceed(newRequest)
+            }
+            .addInterceptor(logging)
             .build()
     }
 
+    @Singleton
     @Provides
-    fun provideGsonConverterFactory(): GsonConverterFactory {
-        return GsonConverterFactory.create()
-    }
-
-    @Provides
-    fun provideRetrofit(
-        okHttpClient: OkHttpClient,
-        converterFactory: GsonConverterFactory
-    ): QuizApi {
+    fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(converterFactory)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
-            .create(QuizApi::class.java)
     }
 
+    @Singleton
+    @Provides
+    fun provideServiceApi(retrofit: Retrofit): QuizApi {
+        return retrofit.create(QuizApi::class.java)
+    }
 }

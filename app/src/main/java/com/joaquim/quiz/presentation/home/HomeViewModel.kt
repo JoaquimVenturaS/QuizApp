@@ -1,4 +1,4 @@
-package com.joaquim.quiz.presentantion.home
+package com.joaquim.quiz.presentation.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joaquim.quiz.framework.data.model.question.QuestionModelResponse
 import com.joaquim.quiz.framework.repository.QuizRepository
-import com.joaquim.quiz.presentantion.state.ResourceState
+import com.joaquim.quiz.presentation.state.ResourceState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +24,6 @@ class HomeViewModel @Inject constructor(
         value = "This is home Fragment"
     }
     val text: LiveData<String> = _text
-
 
     private val _details =
         MutableStateFlow<ResourceState<QuestionModelResponse>>(ResourceState.Loading())

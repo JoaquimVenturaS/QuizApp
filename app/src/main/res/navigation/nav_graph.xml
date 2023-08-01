@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.joaquim.quiz.presentantion.login.LoginFragment"
+        android:name="com.joaquim.quiz.presentation.login.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.joaquim.quiz.presentantion.home.HomeFragment"
+        android:name="com.joaquim.quiz.presentation.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.joaquim.quiz.presentantion.dashboard.DashboardFragment"
+        android:name="com.joaquim.quiz.presentation.dashboard.DashboardFragment"
         android:label="@string/title_result"
         tools:layout="@layout/fragment_dashboard" />
 

@@ -1,4 +1,4 @@
-package com.joaquim.quiz.presentantion.state
+package com.joaquim.quiz.presentation.state
 
 sealed class ResourceState<T>(
     val data: T? = null,
