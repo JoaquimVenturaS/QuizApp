@@ -6,7 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.joaquim.quiz.databinding.FragmentHomeBinding
+import com.joaquim.quiz.presentation.adapters.OptionsAdapter
 import com.joaquim.quiz.presentation.base.BaseFragment
 import com.joaquim.quiz.presentation.state.ResourceState
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,6 +19,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override val viewModel: HomeViewModel by viewModels()
+
+    private val optionsAdapter by lazy { OptionsAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,8 +33,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             when (resource) {
                 is ResourceState.Success -> {
                     resource.data?.let { values ->
-                        binding.textHome.text = values.id
-//                        characterAdapter.characters = values.data.results.toList()
+                        optionsAdapter.comics = values.options
+                        binding.tvQuestion.text = values.statement
+                        setupRecycleView()
                     }
                 }
 
@@ -46,6 +53,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 else -> {
                 }
             }
+        }
+    }
+
+    private fun setupRecycleView() = with(binding) {
+        rvOptions.apply {
+            adapter = optionsAdapter
+            layoutManager = LinearLayoutManager(context)
         }
     }
 
