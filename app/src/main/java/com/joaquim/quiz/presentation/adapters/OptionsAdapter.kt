@@ -1,14 +1,21 @@
 package com.joaquim.quiz.presentation.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
+import com.joaquim.quiz.R
 import com.joaquim.quiz.databinding.ItemQuestionBinding
+
 
 class OptionsAdapter : RecyclerView.Adapter<OptionsAdapter.OptionViewHolder>() {
 
+    private var onItemClickListener: ((String) -> Unit)? = null
     inner class OptionViewHolder(val binding: ItemQuestionBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -39,23 +46,25 @@ class OptionsAdapter : RecyclerView.Adapter<OptionsAdapter.OptionViewHolder>() {
 
     override fun getItemCount(): Int = options.size
 
-
-    private var onItemClickListener: ((String) -> Unit)? = null
+    override fun onBindViewHolder(holder: OptionViewHolder, position: Int) {
+        val option = options[position]
+        holder.binding.apply {
+            btOption.text = option
+            btOption.setOnClickListener{
+                onItemClickListener?.let {
+                    setColorOnClick(holder)
+                    it(option)
+                }
+            }
+        }
+    }
 
     fun setOnClickListener(listener: (String) -> Unit) {
         onItemClickListener = listener
     }
 
-    override fun onBindViewHolder(holder: OptionViewHolder, position: Int) {
-        val option = options[position]
-        holder.binding.apply {
-            tvQuestionDescription.text = option
-        }
-        holder.itemView.setOnClickListener {
-            onItemClickListener?.let {
-                it(option)
-            }
-        }
+    private fun setColorOnClick(holder: OptionViewHolder) {
+        holder.binding.btOption.backgroundTintList = ContextCompat.getColorStateList(holder.binding.btOption.context, R.color.purple_200)
     }
 }
 

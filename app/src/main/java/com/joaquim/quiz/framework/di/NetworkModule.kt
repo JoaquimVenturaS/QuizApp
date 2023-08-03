@@ -15,9 +15,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.math.BigInteger
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import javax.inject.Singleton
 
 @Module
@@ -46,7 +43,6 @@ object NetworkModule {
 
         return OkHttpClient().newBuilder()
             .addInterceptor { chain ->
-                val currentTimestamp = System.currentTimeMillis()
                 val newUrl = chain.request().url
                     .newBuilder()
                     .build()

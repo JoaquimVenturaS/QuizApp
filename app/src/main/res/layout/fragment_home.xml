@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:gbp="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -30,6 +31,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/app_name" />
 
+            <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+                android:id="@+id/progress_circular"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/tvQuestion"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestion"
+                gbp:type="chrome_floating_circles" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvOptions"
                 android:layout_width="match_parent"
@@ -40,7 +54,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvQuestion"
-                tools:listitem="@layout/item_question" />
+                tools:listitem="@layout/item_question">
+
+            </androidx.recyclerview.widget.RecyclerView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

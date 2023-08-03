@@ -40,7 +40,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     private fun updateUiWithUser() {
         val welcome = getString(R.string.welcome)
         val displayName = binding.username.text.toString()
-        // TODO : initiate successful logged in experience
         Toast.makeText(
             requireContext(),
             "$welcome $displayName",
