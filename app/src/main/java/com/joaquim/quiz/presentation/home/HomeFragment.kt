@@ -10,7 +10,9 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.joaquim.quiz.R
 import com.joaquim.quiz.databinding.FragmentHomeBinding
+import com.joaquim.quiz.framework.util.toast
 import com.joaquim.quiz.presentation.adapters.OptionsAdapter
 import com.joaquim.quiz.presentation.base.BaseFragment
 import com.joaquim.quiz.presentation.state.ResourceState
@@ -28,6 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.fetch()
         clickAdapter()
         collectQuestionObserver()
+        collectAnswerObserver()
     }
 
     private fun collectQuestionObserver() = lifecycleScope.launch {
@@ -35,6 +38,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             when (resource) {
                 is ResourceState.Success -> {
                     resource.data?.let { values ->
+                        binding.progressCircular.visibility = View.GONE
                         optionsAdapter.options = values.options
                         binding.tvQuestion.text = values.statement
                         setupRecycleView()
@@ -42,15 +46,39 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 }
 
                 is ResourceState.Error -> {
-//                    binding.progressCircular.hide()
-//                    resource.message?.let { message ->
-//                        toast(getString(R.string.an_error_occurred))
-//                        Timber.tag("ListCharacterFragment").e("Error -> $message")
-//                    }
+                    binding.progressCircular.visibility = View.GONE
+                    resource.message?.let {
+                       toast("Ocorreu um erro")
+                   }
                 }
 
                 is ResourceState.Loading -> {
-//                    binding.progressCircular.show()
+                    binding.progressCircular.visibility = View.VISIBLE
+                }
+
+                else -> {
+                }
+            }
+        }
+    }
+
+    private fun collectAnswerObserver() = lifecycleScope.launch {
+        viewModel.response.collect { resource ->
+            when (resource) {
+                is ResourceState.Success -> {
+                    binding.progressCircular.visibility = View.GONE
+                    resource.data?.let { value ->
+                        toast(if(value.result) "Acertou!" else "Errou :(")
+                    }
+                }
+
+                is ResourceState.Error -> {
+                    binding.progressCircular.visibility = View.GONE
+                    toast("Falha na requisição")
+                }
+
+                is ResourceState.Loading -> {
+                    binding.progressCircular.visibility = View.VISIBLE
                 }
 
                 else -> {
@@ -69,10 +97,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     private fun clickAdapter() {
         optionsAdapter.setOnClickListener { optionModel ->
             startAnimationLoader()
-            Toast.makeText(
-                requireContext(), optionModel,
-                Toast.LENGTH_LONG
-            ).show()
+            viewModel.details.value.let {
+                viewModel.sendAnswer(optionModel, it.data?.id?.toInt()!!)
+            }
         }
     }
 

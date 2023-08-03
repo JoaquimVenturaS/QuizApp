@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joaquim.quiz.framework.data.model.answer.AnswerModelRequest
 import com.joaquim.quiz.framework.data.model.question.QuestionModelResponse
+import com.joaquim.quiz.framework.data.model.result.ResultModelResponse
 import com.joaquim.quiz.framework.repository.QuizRepository
 import com.joaquim.quiz.presentation.state.ResourceState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +31,10 @@ class HomeViewModel @Inject constructor(
         MutableStateFlow<ResourceState<QuestionModelResponse>>(ResourceState.Loading())
     val details: StateFlow<ResourceState<QuestionModelResponse>> = _details
 
+    private val _responseQuiz =
+        MutableStateFlow<ResourceState<ResultModelResponse>>(ResourceState.Loading())
+    val response: StateFlow<ResourceState<ResultModelResponse>> = _responseQuiz
+
     fun fetch() = viewModelScope.launch {
         safeFetch()
     }
@@ -46,6 +52,37 @@ class HomeViewModel @Inject constructor(
                 else -> _details.value = ResourceState.Error("Erro na conversão")
             }
         }
+    }
+
+
+    fun sendAnswer(answer: String, id: Int) = viewModelScope.launch {
+        safeSendAnswer(answer, id)
+    }
+
+    private suspend fun safeSendAnswer(answer: String, id: Int) {
+        _responseQuiz.value = ResourceState.Loading()
+        try {
+            val answerModelRequest = AnswerModelRequest(answer)
+            val response = repository.sendAnswer(id, answerModelRequest)
+            _responseQuiz.value = handleResponseAnswer(response)
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> _details.value =
+                    ResourceState.Error("Erro de rede ou conexão com a internet")
+
+                else -> _details.value = ResourceState.Error("Erro na conversão")
+            }
+        }
+    }
+
+    private fun handleResponseAnswer(response: Response<ResultModelResponse>):
+            ResourceState<ResultModelResponse> {
+        if (response.isSuccessful) {
+            response.body()?.let { values ->
+                return ResourceState.Success(values)
+            }
+        }
+        return ResourceState.Error(response.message())
     }
 
     private fun handleResponse(response: Response<QuestionModelResponse>):
