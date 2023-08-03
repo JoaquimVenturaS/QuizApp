@@ -11,7 +11,8 @@ import com.joaquim.quiz.framework.repository.QuizRepository
 import com.joaquim.quiz.presentation.state.ResourceState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
@@ -29,11 +30,27 @@ class HomeViewModel @Inject constructor(
 
     private val _details =
         MutableStateFlow<ResourceState<QuestionModelResponse>>(ResourceState.Loading())
-    val details: StateFlow<ResourceState<QuestionModelResponse>> = _details
+    val details = _details.asStateFlow()
 
     private val _responseQuiz =
         MutableStateFlow<ResourceState<ResultModelResponse>>(ResourceState.Loading())
-    val response: StateFlow<ResourceState<ResultModelResponse>> = _responseQuiz
+    val response = _responseQuiz.asStateFlow()
+
+    private val _counterCorrectQuestions = MutableStateFlow(0)
+    val counterCorrectQuestions = _counterCorrectQuestions.asStateFlow()
+
+    private val _counterQuestionsResolved = MutableLiveData(0)
+    val counterQuestionsResolved: LiveData<Int>
+        get() = _counterQuestionsResolved
+
+    fun incremeantCorrectQuestions() {
+        _counterCorrectQuestions.update { count -> count + 1 } // atomic, safe for concurrent use
+    }
+
+    fun incremeantQuestions() {
+        _counterQuestionsResolved.postValue(_counterCorrectQuestions.value + 1) // atomic, safe for concurrent use
+    }
+
 
     fun fetch() = viewModelScope.launch {
         safeFetch()

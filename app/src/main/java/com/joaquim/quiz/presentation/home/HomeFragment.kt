@@ -1,16 +1,13 @@
 package com.joaquim.quiz.presentation.home
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.joaquim.quiz.R
 import com.joaquim.quiz.databinding.FragmentHomeBinding
 import com.joaquim.quiz.framework.util.toast
 import com.joaquim.quiz.presentation.adapters.OptionsAdapter
@@ -31,6 +28,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         clickAdapter()
         collectQuestionObserver()
         collectAnswerObserver()
+        observeQuestionsResolved()
     }
 
     private fun collectQuestionObserver() = lifecycleScope.launch {
@@ -48,8 +46,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 is ResourceState.Error -> {
                     binding.progressCircular.visibility = View.GONE
                     resource.message?.let {
-                       toast("Ocorreu um erro")
-                   }
+                        toast("Ocorreu um erro")
+                    }
                 }
 
                 is ResourceState.Loading -> {
@@ -68,7 +66,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 is ResourceState.Success -> {
                     binding.progressCircular.visibility = View.GONE
                     resource.data?.let { value ->
-                        toast(if(value.result) "Acertou!" else "Errou :(")
+                        //observeQuestionsResolved()
+                        viewModel.incremeantQuestions()
+                        if (value.result) {
+                            toast("Acertou!")
+                            viewModel.incremeantCorrectQuestions()
+                        } else toast("Errou :(")
+                        viewModel.fetch()
                     }
                 }
 
@@ -83,6 +87,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
                 else -> {
                 }
+            }
+        }
+    }
+
+    private fun observeQuestionsResolved()  {
+        viewModel.counterQuestionsResolved.observe(viewLifecycleOwner) {
+            if (it >= 1) {
+                val action =
+                    HomeFragmentDirections.actionNavigationHomeToNavigationDashboard(
+                        viewModel.counterCorrectQuestions.value
+                    )
+                findNavController().navigate(action)
             }
         }
     }

@@ -1,10 +1,10 @@
-package com.joaquim.quiz.presentation.dashboard
+package com.joaquim.quiz.presentation.punctuation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class PunctuationViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"

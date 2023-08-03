@@ -22,13 +22,17 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_navigation_dashboard"
-            app:destination="@id/navigation_dashboard" />
+            app:destination="@id/navigation_punctuation" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.joaquim.quiz.presentation.dashboard.DashboardFragment"
+        android:id="@+id/navigation_punctuation"
+        android:name="com.joaquim.quiz.presentation.punctuation.PunctuationFragment"
         android:label="@string/title_result"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_punctuation" >
+        <argument
+            android:name="points"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>
