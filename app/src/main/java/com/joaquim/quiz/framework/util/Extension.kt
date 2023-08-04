@@ -11,11 +11,3 @@ fun Fragment.toast(message: String, duration: Int = Toast.LENGTH_LONG) {
         duration
     ).show()
 }
-
-fun View.show() {
-    visibility = View.VISIBLE
-}
-
-fun View.hide() {
-    visibility = View.INVISIBLE
-}

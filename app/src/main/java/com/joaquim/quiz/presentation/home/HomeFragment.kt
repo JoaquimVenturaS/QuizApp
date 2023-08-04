@@ -50,7 +50,8 @@ class HomeFragment : Fragment() {
         viewModel.details.collect { resource ->
             when (resource) {
                 is ResourceState.Success -> {
-                    resource.data?.let { values ->
+                    resource.data?.let { values ->4
+                        binding.rvOptions.visibility = View.VISIBLE
                         binding.progressCircular.visibility = View.GONE
                         optionsAdapter.options = values.options
                         binding.tvQuestion.text = values.statement
@@ -59,10 +60,7 @@ class HomeFragment : Fragment() {
                 }
 
                 is ResourceState.Error -> {
-                    binding.progressCircular.visibility = View.GONE
-                    resource.message?.let {
-                        toast("Ocorreu um erro")
-                    }
+                    reloadOnError()
                 }
 
                 is ResourceState.Loading -> {
@@ -71,6 +69,19 @@ class HomeFragment : Fragment() {
 
                 else -> {
                 }
+            }
+        }
+    }
+
+    private fun reloadOnError() {
+        binding.run {
+            progressCircular.visibility = View.GONE
+            rvOptions.visibility = View.GONE
+            cstError.visibility = View.VISIBLE
+            btReload.setOnClickListener {
+                cstError.visibility = View.GONE
+                binding.progressCircular.visibility = View.VISIBLE
+                viewModel.fetch()
             }
         }
     }

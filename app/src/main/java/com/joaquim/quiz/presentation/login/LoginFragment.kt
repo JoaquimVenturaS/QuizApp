@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.joaquim.quiz.R
 import com.joaquim.quiz.databinding.FragmentLoginBinding
 import com.joaquim.quiz.framework.data.model.user.UserModel
+import com.joaquim.quiz.framework.util.toast
 import com.joaquim.quiz.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +27,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     }
 
     private fun setOnClick() {
-        binding.login.setOnClickListener { login() }
+        binding.login.setOnClickListener {
+            if (binding.username.text.length > 3) login()
+            else {
+                toast("Seu usuário deve conter mais que 3 caracteres")
+            }
+        }
     }
 
     private fun login() {
@@ -40,11 +46,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     private fun updateUiWithUser() {
         val welcome = getString(R.string.welcome)
         val displayName = binding.username.text.toString()
-        Toast.makeText(
-            requireContext(),
-            "$welcome $displayName",
-            Toast.LENGTH_LONG
-        ).show()
+        toast("$welcome $displayName")
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
