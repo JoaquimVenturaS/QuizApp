@@ -39,16 +39,15 @@ class HomeViewModel @Inject constructor(
     private val _counterCorrectQuestions = MutableStateFlow(0)
     val counterCorrectQuestions = _counterCorrectQuestions.asStateFlow()
 
-    private val _counterQuestionsResolved = MutableLiveData(0)
-    val counterQuestionsResolved: LiveData<Int>
-        get() = _counterQuestionsResolved
+    private val _counterQuestionsResolved = MutableStateFlow(0)
+    val counterQuestionsResolved = _counterQuestionsResolved.asStateFlow()
 
-    fun incremeantCorrectQuestions() {
+    fun incrementCorrectQuestions() {
         _counterCorrectQuestions.update { count -> count + 1 } // atomic, safe for concurrent use
     }
 
-    fun incremeantQuestions() {
-        _counterQuestionsResolved.postValue(_counterCorrectQuestions.value + 1) // atomic, safe for concurrent use
+    fun incrementQuestions() {
+        _counterQuestionsResolved.update { count -> count + 1 }
     }
 
 

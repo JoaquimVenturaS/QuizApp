@@ -21,18 +21,21 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_navigation_home_to_navigation_dashboard"
-            app:destination="@id/navigation_punctuation" />
+            android:id="@+id/action_navigation_home_to_navigation_finish_quiz"
+            app:destination="@id/navigation_finish_quiz" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_punctuation"
-        android:name="com.joaquim.quiz.presentation.punctuation.PunctuationFragment"
+        android:id="@+id/navigation_finish_quiz"
+        android:name="com.joaquim.quiz.presentation.finish.FinishQuizFragment"
         android:label="@string/title_result"
-        tools:layout="@layout/fragment_punctuation" >
+        tools:layout="@layout/fragment_finish_quiz">
         <argument
             android:name="points"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_navigation_finish_quiz_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
 </navigation>

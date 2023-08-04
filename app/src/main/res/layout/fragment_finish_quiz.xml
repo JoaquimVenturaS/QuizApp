@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/rounded_red_gradient_bg"
-    tools:context=".presentation.punctuation.PunctuationFragment">
+    tools:context=".presentation.finish.FinishQuizFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,13 +56,13 @@
             app:layout_constraintTop_toBottomOf="@+id/dialog_title_flash" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btOkCustomDialog"
+            android:id="@+id/btFinish"
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:layout_marginTop="64dp"
+            android:layout_marginBottom="16dp"
+            android:enabled="true"
             android:background="@drawable/rounded_border_white"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="horizontal"
             android:text="Finalizar"
