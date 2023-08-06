@@ -50,9 +50,10 @@ class HomeFragment : Fragment() {
         viewModel.details.collect { resource ->
             when (resource) {
                 is ResourceState.Success -> {
-                    resource.data?.let { values ->4
+                    resource.data?.let { values ->
                         binding.rvOptions.visibility = View.VISIBLE
                         binding.progressCircular.visibility = View.GONE
+                        binding.cstError.visibility = View.GONE
                         optionsAdapter.options = values.options
                         binding.tvQuestion.text = values.statement
                         setupRecycleView()
