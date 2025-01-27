@@ -110,8 +110,4 @@ class HomeViewModel @Inject constructor(
         }
         return ResourceState.Error(response.message())
     }
-
-    fun setPoints(userId: Int, points: Int) = viewModelScope.launch {
-        repository.setPoints(userId, points)
-    }
 }

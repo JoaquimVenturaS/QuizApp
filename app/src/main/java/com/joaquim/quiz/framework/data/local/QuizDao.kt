@@ -1,12 +1,10 @@
 package com.joaquim.quiz.framework.data.local
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import com.joaquim.quiz.framework.data.model.user.UserModel
 import kotlinx.coroutines.flow.Flow
 
@@ -17,7 +15,7 @@ interface QuizDao {
     suspend fun insert(userModel: UserModel): Long
 
     @Query("SELECT * FROM userModel ORDER BY id")
-    fun getAll(): Flow<UserModel>
+    fun getAll(): Flow<List<UserModel>>
 
     @Delete
     suspend fun delete(user: UserModel)
@@ -25,6 +23,6 @@ interface QuizDao {
     @Query("UPDATE userModel SET points=:points WHERE id = :id")
     suspend fun setPoints(id: Int, points: Int)
 
-    @Query("SELECT * FROM userModel WHERE name=:name ")
-    fun loadUser(name: String): LiveData<UserModel>
+    @Query("SELECT * FROM userModel WHERE name = :name")
+    fun loadUser(name: String): Flow<UserModel?>
 }

@@ -14,16 +14,17 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun login(userModel: UserModel) = viewModelScope.launch {
-        val user = repository.loadUser(userModel.name).value
-        if (user != null) {
-
-        } else {
-            insert(userModel)
-
+        repository.loadUser(userModel.name).collect { user ->
+            if (user != null) {
+                insert(user)
+            } else {
+                insert(userModel)
+            }
         }
     }
 
-    private fun insert(userModel: UserModel) = viewModelScope.launch {
+    fun insert(userModel: UserModel) = viewModelScope.launch {
         repository.insert(userModel)
     }
+
 }

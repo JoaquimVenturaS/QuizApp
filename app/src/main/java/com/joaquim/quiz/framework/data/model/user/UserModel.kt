@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 data class UserModel(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
-    val id: Int,
+    val id: Int = 0,
     @SerializedName("name")
     var name: String,
     @SerializedName("points")

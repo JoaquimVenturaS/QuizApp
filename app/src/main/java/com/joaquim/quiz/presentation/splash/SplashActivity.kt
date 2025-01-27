@@ -23,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun setupSplash() = with(binding) {
         tvSplash.alpha = 0f
-        tvSplash.animate().setDuration(1000).alpha(1f).withEndAction {
+        tvSplash.animate().setDuration(1250).alpha(1f).withEndAction {
             val intent = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(intent)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

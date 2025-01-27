@@ -15,18 +15,10 @@ interface QuizApi {
     @GET("question")
     suspend fun getQuestion(): Response<QuestionModelResponse>
 
-
-    //POST /answer?questionId=$id
     @POST("answer?")
     suspend fun sendAnswer(
         @Query("questionId") id: Int,
         @Body answer: AnswerModelRequest
     ): Response<ResultModelResponse>
-
-    //https://<DOMAIN>/api/users?userId=1&userId=2&userId=3
-    //On server, it will be recieved as userId = [1,2,3].
-    //
-    //@GET("/api/users")
-    //public Call<UsersApiResponse> getUsers(@Query("userId") List<Integer> ids);
 
 }
